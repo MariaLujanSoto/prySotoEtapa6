@@ -97,72 +97,72 @@ namespace prySotoEtapa6
             //}
 
 
-            //clsVehiculo nuevoVehiculo = new clsVehiculo();
+            //clsVehiculo vehNuevo = new clsVehiculo();
 
-            //nuevoVehiculo.crearAvion();
+            //vehNuevo.crearAvion();
 
-            //int posicionX;
-            //int posicionY;
-            //bool superpuesto;
+            //int posX;
+            //int posY;
+            //bool espacioOcupado;
 
             //do
             //{
-            //    posicionX = rnd.Next(0, this.ClientSize.Width - nuevoVehiculo.Avion.Width);
+            //    posX = rnd.Next(0, this.ClientSize.Width - vehNuevo.Avion.Width);
 
-            //    posicionY = rnd.Next(0, this.ClientSize.Height - nuevoVehiculo.Avion.Height);
+            //    posY = rnd.Next(0, this.ClientSize.Height - vehNuevo.Avion.Height);
 
-            //    superpuesto = false;
+            //    espacioOcupado = false;
 
             //    foreach (clsVehiculo vehiculoExistente in listaVehiculos)
             //    {
-            //        if (Math.Abs(posicionX - vehiculoExistente.Avion.Location.X) < nuevoVehiculo.Avion.Width && Math.Abs(posicionY - vehiculoExistente.Avion.Location.Y) < nuevoVehiculo.Avion.Height)
+            //        if (Math.Abs(posX - vehiculoExistente.Avion.Location.X) < vehNuevo.Avion.Width && Math.Abs(posY - vehiculoExistente.Avion.Location.Y) < vehNuevo.Avion.Height)
             //        {
-            //            superpuesto = true;
+            //            espacioOcupado = true;
             //            break;
             //        }
             //    }
             //}
-            //while (superpuesto);
+            //while (espacioOcupado);
 
-            //nuevoVehiculo.Avion.Location = new Point(posicionX, posicionY);
-            //listaVehiculos.Add(nuevoVehiculo);
-            //Controls.Add(nuevoVehiculo.Avion);
+            //vehNuevo.Avion.Location = new Point(posX, posY);
+            //listaVehiculos.Add(vehNuevo);
+            //Controls.Add(vehNuevo.Avion);
             //return vehiculo;
 
 
-            clsVehiculo nuevoVehiculo = new clsVehiculo();
-            nuevoVehiculo.crearAvion();
+            clsVehiculo vehNuevo = new clsVehiculo();
+            vehNuevo.crearAvion();
 
             int margen = 50; // Margen
 
-            int posicionX;
-            int posicionY;
-            bool superpuesto;
+            int posX;
+            int posY;
+            bool espacioOcupado;
 
             do
             {
                 // Pos aleatorioa dentro del frm
-                posicionX = rnd.Next(margen, this.ClientSize.Width - margen - nuevoVehiculo.Avion.Width);
-                posicionY = rnd.Next(margen, this.ClientSize.Height - margen - nuevoVehiculo.Avion.Height);
+                posX = rnd.Next(margen, this.ClientSize.Width - margen - vehNuevo.Avion.Width);
+                posY = rnd.Next(margen, this.ClientSize.Height - margen - vehNuevo.Avion.Height);
 
-                superpuesto = false;
+                espacioOcupado = false;
 
                 // Verificar q la nueva posición no este sobre las otras
                 foreach (clsVehiculo vehiculoExistente in listaVehiculos)
                 {
-                    if (Math.Abs(posicionX - vehiculoExistente.Avion.Location.X) < nuevoVehiculo.Avion.Width &&
-                        Math.Abs(posicionY - vehiculoExistente.Avion.Location.Y) < nuevoVehiculo.Avion.Height)
+                    if (Math.Abs(posX - vehiculoExistente.Avion.Location.X) < vehNuevo.Avion.Width &&
+                        Math.Abs(posY - vehiculoExistente.Avion.Location.Y) < vehNuevo.Avion.Height)
                     {
-                        superpuesto = true;
+                        espacioOcupado = true;
                         break;
                     }
                 }
-            } while (superpuesto);
+            } while (espacioOcupado);
 
             // dar la pos y crear el vehiculo
-            nuevoVehiculo.Avion.Location = new Point(posicionX, posicionY);
-            listaVehiculos.Add(nuevoVehiculo);
-            Controls.Add(nuevoVehiculo.Avion);
+            vehNuevo.Avion.Location = new Point(posX, posY);
+            listaVehiculos.Add(vehNuevo);
+            Controls.Add(vehNuevo.Avion);
 
 
         }
