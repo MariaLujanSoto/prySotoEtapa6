@@ -168,6 +168,7 @@ namespace prySotoEtapa6
             {
                 
                 timer.Start();
+                VerificarColisiones(vehiculo);
 
             }
         }
@@ -176,8 +177,8 @@ namespace prySotoEtapa6
         {
             foreach (clsVehiculo vehiculo in listaVehiculos.ToList())
             {
-                int dx = rnd.Next(-10, 11); // Movimiento aleatorio en el eje X
-                int dy = rnd.Next(-10, 11); // Movimiento aleatorio en el eje Y
+                int dx = rnd.Next(-30, 30); // Movimiento aleatorio en el eje X
+                int dy = rnd.Next(-30, 30); // Movimiento aleatorio en el eje Y
 
                 // Calcula la nueva posición sumando los cambios aleatorios
                 int nuevaPosX = vehiculo.Auto.Location.X + dx;
