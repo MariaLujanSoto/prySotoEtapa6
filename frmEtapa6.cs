@@ -139,8 +139,8 @@ namespace prySotoEtapa6
             {
                 if (vehiculo != otroVehiculo && vehiculo.Bounds.IntersectsWith(otroVehiculo.Bounds))
                 {
-                    listaVehiculos.Remove(vehiculo);
-                    listaVehiculos.Remove(otroVehiculo);
+                    //listaVehiculos.Remove(vehiculo);
+                    //listaVehiculos.Remove(otroVehiculo);
                     MessageBox.Show("¡Choque entre vehículos!");
 
                 }
