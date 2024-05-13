@@ -21,6 +21,9 @@ namespace prySotoEtapa6
         }
 
         private List<PictureBox> vehiculos = new List<PictureBox>();
+
+        List<clsVehiculo> listaVehiculos = new List<clsVehiculo>();
+
         private Random rnd = new Random();
         clsVehiculo objAuto = new clsVehiculo();
         clsVehiculo objAvion = new clsVehiculo();
@@ -28,7 +31,7 @@ namespace prySotoEtapa6
 
         private void frmEtapa6_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnCrear_Click(object sender, EventArgs e)
@@ -49,8 +52,6 @@ namespace prySotoEtapa6
             for (int i = 0; i < cantidad; i++)
             {
                 PictureBox vehiculo = CrearVehiculoAleatorio();
-                vehiculos.Add(vehiculo);
-                Controls.Add(vehiculo);
             }
 
         }
@@ -97,72 +98,94 @@ namespace prySotoEtapa6
                     break;
             }
 
-            // Verificar colisiones al crear el vehículo
-            bool hayColisiones = true;
-            while (hayColisiones)
+
+            clsVehiculo nuevoVehiculo = new clsVehiculo();
+
+            nuevoVehiculo.crearAuto();
+
+            int posicionX;
+            int posicionY;
+            bool superpuesto;
+
+            do
             {
-                // Comprobar si hay colisiones con otros vehículos existentes
-                hayColisiones = false;
-                foreach (PictureBox v in vehiculos)
+                posicionX = rnd.Next(0, this.ClientSize.Width - nuevoVehiculo.Auto.Width);
+
+                posicionY = rnd.Next(0, this.ClientSize.Height - nuevoVehiculo.Auto.Height);
+
+                superpuesto = false;
+
+                foreach (clsVehiculo vehiculoExistente in listaVehiculos)
                 {
-                    if (vehiculo.Bounds.IntersectsWith(v.Bounds))
+                    if (Math.Abs(posicionX - vehiculoExistente.Auto.Location.X) < nuevoVehiculo.Auto.Width && Math.Abs(posicionY - vehiculoExistente.Auto.Location.Y) < nuevoVehiculo.Auto.Height)
                     {
-                        // Si hay colisión, ajustar la posición y volver a comprobar
-                        vehiculo.Location = new Point(rnd.Next(ClientSize.Width - vehiculo.Width), rnd.Next(ClientSize.Height - vehiculo.Height));
-                        hayColisiones = true;
+                        superpuesto = true;
                         break;
                     }
                 }
             }
+            while (superpuesto);
 
-            // Agregar el vehículo a la lista y devolverlo
-            vehiculos.Add(vehiculo);
+            nuevoVehiculo.Auto.Location = new Point(posicionX, posicionY);
+            listaVehiculos.Add(nuevoVehiculo);
+            Controls.Add(nuevoVehiculo.Auto);
             return vehiculo;
 
         }
 
         private void VerificarColisiones(PictureBox vehiculo)
         {
-            foreach (PictureBox otroVehiculo in vehiculos)
+            foreach (PictureBox otroVehiculo in vehiculos.ToList())
             {
                 if (vehiculo != otroVehiculo && vehiculo.Bounds.IntersectsWith(otroVehiculo.Bounds))
                 {
+                    listaVehiculos.Remove(vehiculo);
+                    listaVehiculos.Remove(otroVehiculo);
                     MessageBox.Show("¡Choque entre vehículos!");
-                    // Aquí podrías implementar otras acciones, como eliminar los vehículos implicados en la colisión
+
                 }
             }
+
+            //foreach (clsVehiculo otroVehiculo in listaVehiculos.ToList())
+            //{
+            //    if (otroVehiculo != vehiculo && vehiculo.pctAuto.Bounds.IntersectsWith(otroVehiculo.pctAuto.Bounds))
+            //    {
+            //        listaVehiculos.Remove(vehiculo);
+            //        listaVehiculos.Remove(otroVehiculo);
+            //        Controls.Remove(vehiculo.pctAuto);
+            //        Controls.Remove(otroVehiculo.pctAuto);
+            //        break;
+            //    }
+            //}
         }
 
 
-        private void MoverVehiculo(PictureBox vehiculo)
-        {
-            int dx = rnd.Next(-10, 11); // Movimiento aleatorio en el eje X
-            int dy = rnd.Next(-10, 11); // Movimiento aleatorio en el eje Y
-
-            // Calcula la nueva posición sumando los cambios aleatorios
-            int nuevaX = vehiculo.Location.X + dx;
-            int nuevaY = vehiculo.Location.Y + dy;
-
-            // Verifica que el vehículo no se salga de los límites del formulario
-            nuevaX = Math.Max(0, Math.Min(nuevaX, this.ClientSize.Width - vehiculo.Width));
-            nuevaY = Math.Max(0, Math.Min(nuevaY, this.ClientSize.Height - vehiculo.Height));
-
-            // Actualiza la posición del vehículo
-            vehiculo.Location = new Point(nuevaX, nuevaY);
-        }
+        
 
         private void btnMover_Click(object sender, EventArgs e)
         {
             foreach (PictureBox vehiculo in vehiculos)
             {
-                MoverVehiculo(vehiculo);
-                VerificarColisiones(vehiculo);
+                
+                timer.Start();
+
             }
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            foreach (clsVehiculo vehiculo in listaVehiculos.ToList())
+            {
+                int dx = rnd.Next(-10, 11); // Movimiento aleatorio en el eje X
+                int dy = rnd.Next(-10, 11); // Movimiento aleatorio en el eje Y
 
+                // Calcula la nueva posición sumando los cambios aleatorios
+                int nuevaPosX = vehiculo.Auto.Location.X + dx;
+                int nuevaPosY = vehiculo.Auto.Location.Y + dy;
+
+                // Actualiza la posición del vehículo
+                vehiculo.Auto.Location = new Point(nuevaPosX, nuevaPosY);
+            }
         }
     }
 }
