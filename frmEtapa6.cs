@@ -15,12 +15,12 @@ namespace prySotoEtapa6
         public frmEtapa6()
         {
             InitializeComponent();
-            timer.Interval = 100; // Intervalo de 100 milisegundos para mover los vehículos
-            timer.Tick += timer_Tick; // Asigna el evento Tick al Timer
-            timer.Start(); // Inicia el Timer
+            timer.Interval = 100; 
+            timer.Tick += timer_Tick; 
+           
         }
 
-        private List<PictureBox> vehiculos = new List<PictureBox>();
+        //private List<PictureBox> vehiculos = new List<PictureBox>();
 
         List<clsVehiculo> listaVehiculos = new List<clsVehiculo>();
 
@@ -51,52 +51,52 @@ namespace prySotoEtapa6
 
             for (int i = 0; i < cantidad; i++)
             {
-                PictureBox vehiculo = CrearVehiculoAleatorio();
+                CrearVehiculoAleatorio();
             }
 
         }
 
-        private PictureBox CrearVehiculoAleatorio()
+        private void CrearVehiculoAleatorio()
         {
-            PictureBox vehiculo;
-            int indiceAleatorio = rnd.Next(1, 4);
+            //PictureBox vehiculo;
+            //int indiceAleatorio = rnd.Next(1, 4);
 
-            switch (indiceAleatorio)
-            {
-                case 1:
-                    if (objAuto.Auto != null)
-                    {
-                        Controls.Remove(objAuto.Auto);
-                    }
-                    objAuto.crearAuto();
-                    objAuto.Auto.Location = new Point(400, 500);
-                    vehiculo = objAuto.Auto;
-                    break;
+            //switch (indiceAleatorio)
+            //{
+            //    case 1:
+            //        if (objAuto.Auto != null)
+            //        {
+            //            Controls.Remove(objAuto.Auto);
+            //        }
+            //        objAuto.crearAuto();
+            //        objAuto.Auto.Location = new Point(400, 500);
+            //        vehiculo = objAuto.Auto;
+            //        break;
 
-                case 2:
-                    if (objAvion.Avion != null)
-                    {
-                        Controls.Remove(objAvion.Avion);
-                    }
-                    objAvion.crearAvion();
-                    objAvion.Avion.Location = new Point(200, 100);
-                    vehiculo = objAvion.Avion;
-                    break;
+            //    case 2:
+            //        if (objAvion.Avion != null)
+            //        {
+            //            Controls.Remove(objAvion.Avion);
+            //        }
+            //        objAvion.crearAvion();
+            //        objAvion.Avion.Location = new Point(200, 100);
+            //        vehiculo = objAvion.Avion;
+            //        break;
 
-                case 3:
-                    if (objBarco.Barco != null)
-                    {
-                        Controls.Remove(objBarco.Barco);
-                    }
-                    objBarco.crearBarco();
-                    objBarco.Barco.Location = new Point(300, 350);
-                    vehiculo = objBarco.Barco;
-                    break;
+            //    case 3:
+            //        if (objBarco.Barco != null)
+            //        {
+            //            Controls.Remove(objBarco.Barco);
+            //        }
+            //        objBarco.crearBarco();
+            //        objBarco.Barco.Location = new Point(300, 350);
+            //        vehiculo = objBarco.Barco;
+            //        break;
 
-                default:
-                    vehiculo = new PictureBox(); // En caso de un valor no válido, se crea un PictureBox vacío
-                    break;
-            }
+            //    default:
+            //        vehiculo = new PictureBox(); // En caso de un valor no válido, se crea un PictureBox vacío
+            //        break;
+            //}
 
 
             clsVehiculo nuevoVehiculo = new clsVehiculo();
@@ -129,48 +129,18 @@ namespace prySotoEtapa6
             nuevoVehiculo.Auto.Location = new Point(posicionX, posicionY);
             listaVehiculos.Add(nuevoVehiculo);
             Controls.Add(nuevoVehiculo.Auto);
-            return vehiculo;
+            //return vehiculo;
 
         }
-
-        private void VerificarColisiones(PictureBox vehiculo)
-        {
-            foreach (PictureBox otroVehiculo in vehiculos.ToList())
-            {
-                if (vehiculo != otroVehiculo && vehiculo.Bounds.IntersectsWith(otroVehiculo.Bounds))
-                {
-                    //listaVehiculos.Remove(vehiculo);
-                    //listaVehiculos.Remove(otroVehiculo);
-                    MessageBox.Show("¡Choque entre vehículos!");
-
-                }
-            }
-
-            //foreach (clsVehiculo otroVehiculo in listaVehiculos.ToList())
-            //{
-            //    if (otroVehiculo != vehiculo && vehiculo.pctAuto.Bounds.IntersectsWith(otroVehiculo.pctAuto.Bounds))
-            //    {
-            //        listaVehiculos.Remove(vehiculo);
-            //        listaVehiculos.Remove(otroVehiculo);
-            //        Controls.Remove(vehiculo.pctAuto);
-            //        Controls.Remove(otroVehiculo.pctAuto);
-            //        break;
-            //    }
-            //}
-        }
-
-
+   
+       
         
 
         private void btnMover_Click(object sender, EventArgs e)
-        {
-            foreach (PictureBox vehiculo in vehiculos)
-            {
-                
-                timer.Start();
-                VerificarColisiones(vehiculo);
-
-            }
+        {           
+            
+      
+            timer.Start();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -186,7 +156,21 @@ namespace prySotoEtapa6
 
                 // Actualiza la posición del vehículo
                 vehiculo.Auto.Location = new Point(nuevaPosX, nuevaPosY);
+
+                // Verifica colisiones y elimina los vehículos involucrados
+                foreach (clsVehiculo otroVehiculo in listaVehiculos.ToList())
+                {
+                    if (vehiculo != otroVehiculo && vehiculo.Auto.Bounds.IntersectsWith(otroVehiculo.Auto.Bounds))
+                    {
+                        // Eliminar vehículos de la lista y del formulario
+                        Controls.Remove(otroVehiculo.Auto);
+                        listaVehiculos.Remove(otroVehiculo);
+                                             
+                    }
+                }
+                
             }
+
         }
     }
 }
