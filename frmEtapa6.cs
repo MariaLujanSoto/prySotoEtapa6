@@ -25,9 +25,7 @@ namespace prySotoEtapa6
         List<clsVehiculo> listaVehiculos = new List<clsVehiculo>();
 
         private Random rnd = new Random();
-        clsVehiculo objAuto = new clsVehiculo();
-        clsVehiculo objAvion = new clsVehiculo();
-        clsVehiculo objBarco = new clsVehiculo();
+           
 
         private void frmEtapa6_Load(object sender, EventArgs e)
         {
@@ -64,13 +62,13 @@ namespace prySotoEtapa6
             //switch (indiceAleatorio)
             //{
             //    case 1:
-            //        if (objAuto.Auto != null)
+            //        if (objAvion.Avion != null)
             //        {
-            //            Controls.Remove(objAuto.Auto);
+            //            Controls.Remove(objAvion.Avion);
             //        }
-            //        objAuto.crearAuto();
-            //        objAuto.Auto.Location = new Point(400, 500);
-            //        vehiculo = objAuto.Auto;
+            //        objAvion.crearAvion();
+            //        objAvion.Avion.Location = new Point(400, 500);
+            //        vehiculo = objAvion.Avion;
             //        break;
 
             //    case 2:
@@ -99,9 +97,43 @@ namespace prySotoEtapa6
             //}
 
 
-            clsVehiculo nuevoVehiculo = new clsVehiculo();
+            //clsVehiculo nuevoVehiculo = new clsVehiculo();
 
-            nuevoVehiculo.crearAuto();
+            //nuevoVehiculo.crearAvion();
+
+            //int posicionX;
+            //int posicionY;
+            //bool superpuesto;
+
+            //do
+            //{
+            //    posicionX = rnd.Next(0, this.ClientSize.Width - nuevoVehiculo.Avion.Width);
+
+            //    posicionY = rnd.Next(0, this.ClientSize.Height - nuevoVehiculo.Avion.Height);
+
+            //    superpuesto = false;
+
+            //    foreach (clsVehiculo vehiculoExistente in listaVehiculos)
+            //    {
+            //        if (Math.Abs(posicionX - vehiculoExistente.Avion.Location.X) < nuevoVehiculo.Avion.Width && Math.Abs(posicionY - vehiculoExistente.Avion.Location.Y) < nuevoVehiculo.Avion.Height)
+            //        {
+            //            superpuesto = true;
+            //            break;
+            //        }
+            //    }
+            //}
+            //while (superpuesto);
+
+            //nuevoVehiculo.Avion.Location = new Point(posicionX, posicionY);
+            //listaVehiculos.Add(nuevoVehiculo);
+            //Controls.Add(nuevoVehiculo.Avion);
+            //return vehiculo;
+
+
+            clsVehiculo nuevoVehiculo = new clsVehiculo();
+            nuevoVehiculo.crearAvion();
+
+            int margen = 50; // Margen
 
             int posicionX;
             int posicionY;
@@ -109,27 +141,29 @@ namespace prySotoEtapa6
 
             do
             {
-                posicionX = rnd.Next(0, this.ClientSize.Width - nuevoVehiculo.Auto.Width);
-
-                posicionY = rnd.Next(0, this.ClientSize.Height - nuevoVehiculo.Auto.Height);
+                // Pos aleatorioa dentro del frm
+                posicionX = rnd.Next(margen, this.ClientSize.Width - margen - nuevoVehiculo.Avion.Width);
+                posicionY = rnd.Next(margen, this.ClientSize.Height - margen - nuevoVehiculo.Avion.Height);
 
                 superpuesto = false;
 
+                // Verificar q la nueva posición no este sobre las otras
                 foreach (clsVehiculo vehiculoExistente in listaVehiculos)
                 {
-                    if (Math.Abs(posicionX - vehiculoExistente.Auto.Location.X) < nuevoVehiculo.Auto.Width && Math.Abs(posicionY - vehiculoExistente.Auto.Location.Y) < nuevoVehiculo.Auto.Height)
+                    if (Math.Abs(posicionX - vehiculoExistente.Avion.Location.X) < nuevoVehiculo.Avion.Width &&
+                        Math.Abs(posicionY - vehiculoExistente.Avion.Location.Y) < nuevoVehiculo.Avion.Height)
                     {
                         superpuesto = true;
                         break;
                     }
                 }
-            }
-            while (superpuesto);
+            } while (superpuesto);
 
-            nuevoVehiculo.Auto.Location = new Point(posicionX, posicionY);
+            // dar la pos y crear el vehiculo
+            nuevoVehiculo.Avion.Location = new Point(posicionX, posicionY);
             listaVehiculos.Add(nuevoVehiculo);
-            Controls.Add(nuevoVehiculo.Auto);
-            //return vehiculo;
+            Controls.Add(nuevoVehiculo.Avion);
+
 
         }
    
@@ -138,37 +172,39 @@ namespace prySotoEtapa6
 
         private void btnMover_Click(object sender, EventArgs e)
         {           
-            
-      
+                 
             timer.Start();
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            
             foreach (clsVehiculo vehiculo in listaVehiculos.ToList())
             {
-                int dx = rnd.Next(-30, 30); // Movimiento aleatorio en el eje X
+                int dx = rnd.Next(-30, 30); // Mov eje X
                 int dy = rnd.Next(-30, 30); // Movimiento aleatorio en el eje Y
 
                 // Calcula la nueva posición sumando los cambios aleatorios
-                int nuevaPosX = vehiculo.Auto.Location.X + dx;
-                int nuevaPosY = vehiculo.Auto.Location.Y + dy;
+                int nuevaPosX = vehiculo.Avion.Location.X + dx;
+                int nuevaPosY = vehiculo.Avion.Location.Y + dy;
+
+                // Verifica que la nueva posición esté dentro de los límites del formulario
+                nuevaPosX = Math.Max(0, Math.Min(nuevaPosX, this.ClientSize.Width - vehiculo.Avion.Width));
+                nuevaPosY = Math.Max(0, Math.Min(nuevaPosY, this.ClientSize.Height - vehiculo.Avion.Height));
 
                 // Actualiza la posición del vehículo
-                vehiculo.Auto.Location = new Point(nuevaPosX, nuevaPosY);
+                vehiculo.Avion.Location = new Point(nuevaPosX, nuevaPosY);
 
                 // Verifica colisiones y elimina los vehículos involucrados
                 foreach (clsVehiculo otroVehiculo in listaVehiculos.ToList())
                 {
-                    if (vehiculo != otroVehiculo && vehiculo.Auto.Bounds.IntersectsWith(otroVehiculo.Auto.Bounds))
+                    if (vehiculo != otroVehiculo && vehiculo.Avion.Bounds.IntersectsWith(otroVehiculo.Avion.Bounds))
                     {
                         // Eliminar vehículos de la lista y del formulario
-                        Controls.Remove(otroVehiculo.Auto);
+                        Controls.Remove(otroVehiculo.Avion);
                         listaVehiculos.Remove(otroVehiculo);
-                                             
                     }
                 }
-                
             }
 
         }
